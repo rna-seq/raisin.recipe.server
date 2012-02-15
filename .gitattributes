@@ -1,0 +1,6 @@
+* text=auto !eol
+raisin/__init__.py -text
+raisin/recipe/__init__.py -text
+raisin/recipe/server/__init__.py -text
+raisin/recipe/server/server.py -text
+/setup.py -text
