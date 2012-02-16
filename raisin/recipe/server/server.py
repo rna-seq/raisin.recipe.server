@@ -28,8 +28,8 @@ def projects_ini(buildout_directory, projects):
         ini.write('[%s]\n' % project)
         ini.write('projects = %s,\n' % project)
         ini.write('    [[dbs]]\n')
-        ini.write('    RNASeqPipeline = %s\n' % project)
-        ini.write('    RNASeqPipelineCommon = %sCommon\n' % project)
+        ini.write('    RNAseqPipeline = %s\n' % project)
+        ini.write('    RNAseqPipelineCommon = %sCommon\n' % project)
     ini.close()
 
 def databases_ini(buildout_directory, dbs):
@@ -82,6 +82,25 @@ def get_dbs(profiles):
         dbs.add((profile['project_id'], profile['DB'], profile['COMMONDB'],))
     return dbs
 
+def pyramid_projects_ini(buildout_directory, projects):
+    """
+    Produce a projects.ini file for pyramid:
+    
+    etc/pyramid/projects.ini
+    
+    Like this:
+    
+    [Test]
+    users = "raisin",
+    """
+    path = os.path.join(buildout_directory, 'etc/pyramid/projects.ini')
+    ini = open(path, 'w')
+    for project in projects:
+        ini.write('[%s]\n' % project)
+        ini.write('users = "raisin",\n')
+        ini.write('\n')
+    ini.close()
+
 
 def main(buildout_directory, staging):
     profiles = get_profiles(staging)
@@ -90,3 +109,5 @@ def main(buildout_directory, staging):
     commondbs = get_dbs(profiles)
     dbs = get_dbs(profiles)
     databases_ini(buildout_directory, dbs)
+    pyramid_projects_ini(buildout_directory, projects)
+
