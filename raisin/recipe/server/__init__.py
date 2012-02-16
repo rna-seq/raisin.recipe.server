@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Recipe raisin.recipe.server"""
 
-from raisin.recipe.load import server
+from raisin.recipe.server import server
 
 
 class Recipe(object):
@@ -13,7 +13,8 @@ class Recipe(object):
 
     def install(self):
         staging = self.buildout['transform']['staging']
-        server.main(staging)
+        buildout_directory = self.buildout['buildout']['directory']
+        server.main(buildout_directory, staging)
 
     def update(self):
         return self.install()
