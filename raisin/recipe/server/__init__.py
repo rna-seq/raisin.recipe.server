@@ -14,7 +14,7 @@ class Recipe(object):
     def install(self):
         staging = self.buildout['transform']['staging']
         buildout_directory = self.buildout['buildout']['directory']
-        server.main(buildout_directory, staging)
+        server.main(self.buildout, buildout_directory, staging)
 
     def update(self):
         return self.install()
