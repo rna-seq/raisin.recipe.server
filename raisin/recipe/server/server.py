@@ -101,8 +101,47 @@ def pyramid_projects_ini(buildout_directory, projects):
         ini.write('\n')
     ini.close()
 
+def get_parameters(buildout):
+    vocabulary = buildout['parameter_vocabulary']
+    categories = buildout['parameter_categories']
+    types = buildout['parameter_types']
+    columns = buildout['parameter_columns']
+    parameters = {}
+    for key, value in vocabulary.items():
+        parameters[key] = {'title':value,
+                           'category':categories[key],
+                           'type':types[key],
+                           'column':columns[key]
+                           }
+    return parameters
+    
+def misc_parameters_ini(buildout_directory, parameters):
+    """
+    Produce a parameters.ini file:
+    
+    etc/misc/parameters.ini
+    
+    Like this:
+    
+    [partition]
+    title = Partition
+    type = string
+    """
+    path = os.path.join(buildout_directory, 'etc/misc/parameters.ini')
+    ini = open(path, 'w')
+    keys = parameters.keys()
+    keys.sort()
+    for key in keys:
+        parameter = parameters[key]
+        ini.write('[%s]\n' % key)
+        ini.write('title = %s\n' % parameter['title'])
+        ini.write('category = %s\n' % parameter['category'])
+        ini.write('type = %s\n' % parameter['type'])
+        ini.write('column = %s\n' % parameter['column'])
+        ini.write('\n')
+    ini.close()
 
-def main(buildout_directory, staging):
+def main(buildout, buildout_directory, staging):
     profiles = get_profiles(staging)
     projects = get_projects(profiles)
     projects_ini(buildout_directory, projects)
@@ -110,4 +149,5 @@ def main(buildout_directory, staging):
     dbs = get_dbs(profiles)
     databases_ini(buildout_directory, dbs)
     pyramid_projects_ini(buildout_directory, projects)
-
+    parameters = get_parameters(buildout)
+    misc_parameters_ini(buildout_directory, parameters)
