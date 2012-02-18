@@ -156,6 +156,37 @@ def get_project_users(buildout):
         project_users[key] = value.split('\n')
     return project_users
 
+def get_project_parameters(buildout):
+    project_parameters = buildout['project_parameters']
+    results = {}
+    for key, value in project_parameters.items():
+        results[key] = value.split("\n")
+    return results
+
+def misc_project_parameters_ini(buildout_directory, project_parameters):
+    """
+    Produce a project_parameters.ini file:
+    
+    etc/misc/project_parameters.ini
+    
+    Like this:
+    
+    [Test]
+    parameters = 'read_length',
+    """
+    path = os.path.join(buildout_directory, 'etc/misc/project_parameters.ini')
+    ini = open(path, 'w')
+    keys = project_parameters.keys()
+    keys.sort()
+    for key in keys:
+        parameters = project_parameters[key]
+        ini.write('[%s]\n' % key)
+        value = ['"%s"' % p for p in parameters]
+        ini.write('parameters = %s\n' % ', '.join(value))
+        ini.write('\n')
+    ini.close()
+
+
 def main(buildout, buildout_directory, staging):
     profiles = get_profiles(staging)
     projects = get_projects(profiles)
@@ -166,3 +197,5 @@ def main(buildout, buildout_directory, staging):
     pyramid_projects_ini(buildout_directory, projects, project_users)
     parameters = get_parameters(buildout)
     misc_parameters_ini(buildout_directory, parameters)
+    project_parameters = get_project_parameters(buildout)
+    misc_project_parameters_ini(buildout_directory, project_parameters)
