@@ -30,6 +30,7 @@ def projects_ini(buildout_directory, projects):
         ini.write('    [[dbs]]\n')
         ini.write('    RNAseqPipeline = %s\n' % project)
         ini.write('    RNAseqPipelineCommon = %sCommon\n' % project)
+        ini.write('\n')
     ini.close()
 
 def databases_ini(buildout_directory, dbs):
@@ -52,7 +53,13 @@ def databases_ini(buildout_directory, dbs):
     """
     path = os.path.join(buildout_directory, 'etc/databases/databases.ini')
     ini = open(path, 'w')
+    projects = []
     for project_id, db, commondb in dbs:
+        if project_id in projects:
+            print "Ingnoring project", project_id, db, commondb
+            continue
+        else:
+            projects.append(project_id)
         ini.write('[%s]\n' % project_id)
         ini.write('connection = raisin\n')
         ini.write('db = %s\n' % db)
@@ -62,6 +69,7 @@ def databases_ini(buildout_directory, dbs):
         ini.write('connection = raisin\n')
         ini.write('db = %s\n' % commondb)
         ini.write('description = Contains all the statistics results\n')
+        ini.write('\n')
     ini.close()
 
 def get_profiles(staging):
@@ -82,7 +90,7 @@ def get_dbs(profiles):
         dbs.add((profile['project_id'], profile['DB'], profile['COMMONDB'],))
     return dbs
 
-def pyramid_projects_ini(buildout_directory, projects):
+def pyramid_projects_ini(buildout_directory, projects, project_users):
     """
     Produce a projects.ini file for pyramid:
     
@@ -97,7 +105,8 @@ def pyramid_projects_ini(buildout_directory, projects):
     ini = open(path, 'w')
     for project in projects:
         ini.write('[%s]\n' % project)
-        ini.write('users = "raisin",\n')
+        user_list = project_users[project]
+        ini.write('users = %s\n' % ','.join(user_list))
         ini.write('\n')
     ini.close()
 
@@ -141,13 +150,19 @@ def misc_parameters_ini(buildout_directory, parameters):
         ini.write('\n')
     ini.close()
 
+def get_project_users(buildout):
+    project_users = {}
+    for key, value in buildout['project_users'].items():
+        project_users[key] = value.split('\n')
+    return project_users
+
 def main(buildout, buildout_directory, staging):
     profiles = get_profiles(staging)
     projects = get_projects(profiles)
     projects_ini(buildout_directory, projects)
-    commondbs = get_dbs(profiles)
     dbs = get_dbs(profiles)
     databases_ini(buildout_directory, dbs)
-    pyramid_projects_ini(buildout_directory, projects)
+    project_users = get_project_users(buildout)
+    pyramid_projects_ini(buildout_directory, projects, project_users)
     parameters = get_parameters(buildout)
     misc_parameters_ini(buildout_directory, parameters)
