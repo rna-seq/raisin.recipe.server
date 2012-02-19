@@ -187,8 +187,11 @@ def misc_project_parameters_ini(buildout_directory, project_parameters):
     ini.close()
 
 
-def connections_mysql_ini(buildout_directory, parameters):
+def connections_mysql_ini(buildout_directory):
     """Create the mysql connection file"""
+    path = os.path.join(buildout_directory, 'etc/connections')
+    if not os.path.exists(path):
+            os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/connections/mysql.ini')
     if not os.path.exists(path):
         ini = open(path, 'w')
@@ -197,7 +200,138 @@ def connections_mysql_ini(buildout_directory, parameters):
         ini.write("server = 127.0.0.1\n")
         ini.write("user = raisin\n")
         ini.write("password = raisin\n")
-    ini.close()
+        ini.close()
+
+def pyramid_development_ini(buildout_directory):
+    path = os.path.join(buildout_directory, 'etc/pyramid')
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path = os.path.join(buildout_directory, 'etc/pyramid/development.ini')
+    if not os.path.exists(path):
+        ini = open(path, 'w')
+        ini.write("""[app:main]
+use = egg:raisin.pyramid
+
+pyramid.reload_templates = true
+pyramid.debug_authorization = false
+pyramid.debug_notfound = false
+pyramid.debug_routematch = false
+pyramid.debug_templates = true
+pyramid.default_locale_name = en
+pyramid.includes = pyramid_debugtoolbar
+
+[server:main]
+use = egg:waitress#main
+host = 0.0.0.0
+port = 7777
+
+# Begin logging configuration
+
+[loggers]
+keys = root, raisin
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = INFO
+handlers = console
+
+[logger_raisin]
+level = DEBUG
+handlers =
+qualname = raisin
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
+
+# End logging configuration""")
+        ini.close()
+
+def restish_development_ini(buildout_directory):
+    path = os.path.join(buildout_directory, 'etc/restish')
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path = os.path.join(buildout_directory, 'etc/restish/development.ini')
+    if not os.path.exists(path):
+        ini = open(path, 'w')
+        ini.write("""[DEFAULT]
+; Application id used to prefix logs, errors, etc with something unique to this
+; instance.
+APP_ID = raisin.restish@localhost
+; Email settings.
+SMTP_SERVER = localhost
+ERROR_EMAIL_FROM = %(APP_ID)s
+ERROR_EMAIL_TO = %(APP_ID)s
+
+CACHE_DIR = %(here)s/cache
+
+use_pickles_cache = False
+use_sql_database = True
+pickles_cache_path = %(here)s/../../cache
+mysql_connections = %(here)s/../connections/mysql.ini
+mysql_databases = %(here)s/../databases/databases.ini
+projects = %(here)s/../projects/projects.ini
+parameters = %(here)s/../misc/parameters.ini
+project_parameters = %(here)s/../misc/project_parameters.ini
+sqlite3_database = %(here)s/../../etl/database/database.db
+
+[composite:main]
+use = egg:Paste#cascade
+app1 = public
+app2 = raisin.restish
+
+[app:raisin.restish]
+use = config:raisin.restish.ini#raisin.restish
+
+[app:public]
+use = egg:Paste#static
+document_root = %(here)s/raisin.restish/public
+
+[server:main]
+use = egg:Paste#http
+host = 127.0.0.1
+port = 6464
+
+# Logging configuration
+[loggers]
+keys = root, raisin.restish
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = DEBUG
+handlers = console
+
+[logger_raisin.restish]
+level = DEBUG
+handlers =
+qualname = raisin.restish
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(asctime)s,%(msecs)03d %(levelname)-5.5s [%(name)s] %(message)s
+datefmt = %H:%M:%S""")
+        ini.close()
+
 
 
 def main(buildout, buildout_directory, staging):
@@ -212,4 +346,7 @@ def main(buildout, buildout_directory, staging):
     misc_parameters_ini(buildout_directory, parameters)
     project_parameters = get_project_parameters(buildout)
     misc_project_parameters_ini(buildout_directory, project_parameters)
-    connections_development_ini(buildout_directory, parameters)
+    connections_mysql_ini(buildout_directory)
+    pyramid_development_ini(buildout_directory)
+    restish_development_init(buildout_directory)
+    
