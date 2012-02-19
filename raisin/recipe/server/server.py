@@ -348,5 +348,5 @@ def main(buildout, buildout_directory, staging):
     misc_project_parameters_ini(buildout_directory, project_parameters)
     connections_mysql_ini(buildout_directory)
     pyramid_development_ini(buildout_directory)
-    restish_development_init(buildout_directory)
+    restish_development_ini(buildout_directory)
     
