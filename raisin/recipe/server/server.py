@@ -187,6 +187,19 @@ def misc_project_parameters_ini(buildout_directory, project_parameters):
     ini.close()
 
 
+def connections_mysql_ini(buildout_directory, parameters):
+    """Create the mysql connection file"""
+    path = os.path.join(buildout_directory, 'etc/connections/mysql.ini')
+    if not os.path.exists(path):
+        ini = open(path, 'w')
+        ini.write("[raisin]\n")
+        ini.write("port = 3306\n")
+        ini.write("server = 127.0.0.1\n")
+        ini.write("user = raisin\n")
+        ini.write("password = raisin\n")
+    ini.close()
+
+
 def main(buildout, buildout_directory, staging):
     profiles = get_profiles(staging)
     projects = get_projects(profiles)
@@ -199,3 +212,4 @@ def main(buildout, buildout_directory, staging):
     misc_parameters_ini(buildout_directory, parameters)
     project_parameters = get_project_parameters(buildout)
     misc_project_parameters_ini(buildout_directory, project_parameters)
+    connections_development_ini(buildout_directory, parameters)
