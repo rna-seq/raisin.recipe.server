@@ -332,7 +332,28 @@ format = %(asctime)s,%(msecs)03d %(levelname)-5.5s [%(name)s] %(message)s
 datefmt = %H:%M:%S""")
         ini.close()
 
+def restish_raisin_restish_ini(buildout_directory):
+    path = os.path.join(buildout_directory, 'etc/restish')
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path = os.path.join(buildout_directory, 'etc/restish/raisin.restish.ini')
+    if not os.path.exists(path):
+        ini = open(path, 'w')
+        ini.write("""[app:raisin.restish]
+use = egg:raisin.restish
+cache_dir = %(CACHE_DIR)s""")
+        ini.close()
 
+def pyramid_users_ini(buildout_directory):
+    path = os.path.join(buildout_directory, 'etc/pyramid')
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path = os.path.join(buildout_directory, 'etc/pyramid/users.ini')
+    if not os.path.exists(path):
+        ini = open(path, 'w')
+        ini.write('''[raisin]
+password = "raisin"''')
+        ini.close()
 
 def main(buildout, buildout_directory, staging):
     profiles = get_profiles(staging)
@@ -349,4 +370,5 @@ def main(buildout, buildout_directory, staging):
     connections_mysql_ini(buildout_directory)
     pyramid_development_ini(buildout_directory)
     restish_development_ini(buildout_directory)
-    
+    restish_raisin_restish_ini(buildout_directory)
+    pyramid_users_ini(buildout_directory)
