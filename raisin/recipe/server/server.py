@@ -56,7 +56,7 @@ def databases_ini(buildout_directory, dbs):
     projects = []
     for project_id, db, commondb in dbs:
         if project_id in projects:
-            print "Ingnoring project", project_id, db, commondb
+            print "Ignoring project", project_id, db, commondb
             continue
         else:
             projects.append(project_id)
