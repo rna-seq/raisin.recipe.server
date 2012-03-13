@@ -182,7 +182,7 @@ def misc_project_parameters_ini(buildout_directory, project_parameters):
         parameters = project_parameters[key]
         ini.write('[%s]\n' % key)
         value = ['"%s"' % p for p in parameters]
-        ini.write('parameters = %s\n' % ', '.join(value))
+        ini.write('parameters = %s,\n' % ', '.join(value))
         ini.write('\n')
     ini.close()
 
