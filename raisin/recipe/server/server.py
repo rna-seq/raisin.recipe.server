@@ -106,7 +106,7 @@ def pyramid_projects_ini(buildout_directory, projects, project_users):
     for project in projects:
         ini.write('[%s]\n' % project)
         user_list = project_users[project]
-        ini.write('users = %s\n' % ','.join(user_list))
+        ini.write('users = %s,\n' % ','.join(user_list))
         ini.write('\n')
     ini.close()
 
