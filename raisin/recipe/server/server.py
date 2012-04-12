@@ -74,13 +74,16 @@ def databases_ini(buildout_directory, dbs):
 
 def get_profiles(staging):
     profiles = read_csv(os.path.join(staging, 'profiles.csv'))
-    return [profile for profile in profiles]
-
+    profiles = [profile for profile in profiles]
+    profiles.sort()
+    return profiles
 
 def get_projects(profiles):
     projects = set()
     for profile in profiles:
         projects.add(profile['project_id'])
+    projects = list(projects)
+    projects.sort()
     return projects
 
 
@@ -88,6 +91,8 @@ def get_dbs(profiles):
     dbs = set()
     for profile in profiles:
         dbs.add((profile['project_id'], profile['DB'], profile['COMMONDB'],))
+    dbs = list(dbs)
+    dbs.sort()
     return dbs
 
 def pyramid_projects_ini(buildout_directory, projects, project_users):
