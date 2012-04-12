@@ -1,0 +1,8 @@
+Next release
+============
+
+Bug Fixes
+---------
+
+- Sort the list of projects so that all output in the etc folder is 
+  reproducible
