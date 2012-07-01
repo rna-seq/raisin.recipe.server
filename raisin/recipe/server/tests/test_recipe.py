@@ -102,6 +102,15 @@ class RecipeTests(unittest.TestCase):
         projects = ['Foo']
         project_users = {'Foo':'bar'}
         self.failUnless(pyramid_projects_ini(buildout_directory, projects, project_users) == None)
+
+    def test_pyramid_projects_ini_missing_user(self):
+        """
+        Test configuring the pyramid projects.ini with missing user
+        """
+        buildout_directory = SANDBOX
+        projects = ['Foo']
+        project_users = {}
+        self.failUnless(pyramid_projects_ini(buildout_directory, projects, project_users) == None)
     
     def test_get_parameters(self):
         """
