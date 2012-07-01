@@ -48,23 +48,30 @@ class RecipeTests(unittest.TestCase):
         """
         Test getting the projects
         """
-        profiles = None
-        self.failUnless(get_projects(profiles) == None)
+        profiles = [{'project_id':'Dummy'}]
+        found = get_projects(profiles)
+        expected = ['Dummy']
+        self.failUnless(found == expected, found)
 
     def test_projects_ini(self):
         """
         Test configuring the projects.ini
         """
         buildout_directory = SANDBOX
-        projects = None
+        projects = ['Test']
         self.failUnless(projects_ini(buildout_directory, projects) == None)
 
     def test_get_dbs(self):
         """
         Test getting the dbs
         """
-        profiles = None
-        self.failUnless(get_dbs(profiles) == None)
+        profiles = [{'project_id':'dummy',
+                     'DB': 'db1',
+                     'COMMONDB': 'db2'
+                    }]
+        found = get_dbs(profiles)
+        expected = [('dummy', 'db1', 'db2')]
+        self.failUnless(found == expected, found)
     
     def test_databases_ini(self):
         """
@@ -78,45 +85,62 @@ class RecipeTests(unittest.TestCase):
         """
         Test getting the project users
         """
-        buildout = None
-        self.failUnless(get_project_users(buildout) == None)
+        buildout = {'project_users': {'Project':'foo\nbar'}}
+        self.failUnless(get_project_users(buildout) == {'Project': ['foo','bar']})
 
     def test_pyramid_projects_ini(self):
         """
         Test configuring the pyramid projects.ini
         """
         buildout_directory = SANDBOX
-        projects = None
-        project_users = None
+        projects = ['Foo']
+        project_users = {'Foo':'bar'}
         self.failUnless(pyramid_projects_ini(buildout_directory, projects, project_users) == None)
     
     def test_get_parameters(self):
         """
         Test getting the parameters
         """
-        buildout = None
-        self.failUnless(get_parameters(buildout) == None)
+        buildout = {'parameter_vocabulary': {'read_length': 'Read Length'},
+                    'parameter_categories': {'read_length': 'experiment'},
+                    'parameter_types': {'read_length': 'integer'},
+                    'parameter_columns': {'read_length': 'read_length'},
+                   }
+        expected = {}
+        expected['read_length'] = {'title': 'Read Length',
+                                   'category': 'experiment',
+                                   'type': 'integer',
+                                   'column': 'read_length'
+                                  }
+        found = get_parameters(buildout)
+        self.failUnless(found == expected, found)
     
     def test_misc_parameters_ini(self):
         """
         Test configuring misc parameters.ini
         """
-        buildout = None
+        buildout_directory = SANDBOX
+        parameters = {'read_length' : {'title': 'Read Length',
+                                       'category': 'experiment',
+                                       'type': 'integer',
+                                       'column': 'read_length'
+                                      }
+                     }
         self.failUnless(misc_parameters_ini(buildout_directory, parameters) == None)
     
     def test_get_project_parameters(self):
         """
         Test getting the project parameters
         """
-        buildout = None
-        self.failUnless(get_project_parameters(buildout) == None)
+        buildout = {'project_parameters':{'Dummy':'foo\nbar'}}
+        self.failUnless(get_project_parameters(buildout) == {'Dummy':['foo','bar']})
 
     def test_misc_project_parameters_ini(self):
         """
         Test configuring the project parameters.ini
         """
         buildout_directory = SANDBOX
-        project_parameters = None
+        project_parameters = {'Dummy':['read_length']}
         self.failUnless(misc_project_parameters_ini(buildout_directory, project_parameters) == None)
     
     def test_connections_mysql_ini(self):
