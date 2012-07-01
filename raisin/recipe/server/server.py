@@ -22,6 +22,9 @@ def projects_ini(buildout_directory, projects):
         RNAseqPipeline = db
         RNAseqPipelineCommon = dbcommon
     """
+    path = os.path.join(buildout_directory, 'etc/projects')
+    if not os.path.exists(path):
+        os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/projects/projects.ini')
     ini = open(path, 'w')
     for project in projects:
@@ -51,6 +54,9 @@ def databases_ini(buildout_directory, dbs):
     db = Test_RNAseqPipelineCommon
     description = Contains all the statistics results
     """
+    path = os.path.join(buildout_directory, 'etc/databases')
+    if not os.path.exists(path):
+        os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/databases/databases.ini')
     ini = open(path, 'w')
     projects = []
@@ -106,7 +112,11 @@ def pyramid_projects_ini(buildout_directory, projects, project_users):
     [Test]
     users = "raisin",
     """
+    path = os.path.join(buildout_directory, 'etc/pyramid')
+    if not os.path.exists(path):
+        os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/pyramid/projects.ini')
+    os.makedirs(path)
     ini = open(path, 'w')
     for project in projects:
         ini.write('[%s]\n' % project)
@@ -141,6 +151,9 @@ def misc_parameters_ini(buildout_directory, parameters):
     title = Partition
     type = string
     """
+    path = os.path.join(buildout_directory, 'etc/misc')
+    if not os.path.exists(path):
+        os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/misc/parameters.ini')
     ini = open(path, 'w')
     keys = parameters.keys()
@@ -179,6 +192,9 @@ def misc_project_parameters_ini(buildout_directory, project_parameters):
     [Test]
     parameters = 'read_length',
     """
+    path = os.path.join(buildout_directory, 'etc/misc')
+    if not os.path.exists(path):
+        os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/misc/project_parameters.ini')
     ini = open(path, 'w')
     keys = project_parameters.keys()
