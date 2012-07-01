@@ -119,7 +119,10 @@ def pyramid_projects_ini(buildout_directory, projects, project_users):
     ini = open(path, 'w')
     for project in projects:
         ini.write('[%s]\n' % project)
-        user_list = project_users[project]
+        # If no users are specified for a project, use the anonymous user
+        user_list = ['anonymous']
+        if project_users.has_key(project):
+            user_list = project_users[project]
         ini.write('users = %s,\n' % ','.join(user_list))
         ini.write('\n')
     ini.close()
