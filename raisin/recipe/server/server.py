@@ -116,7 +116,6 @@ def pyramid_projects_ini(buildout_directory, projects, project_users):
     if not os.path.exists(path):
         os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/pyramid/projects.ini')
-    os.makedirs(path)
     ini = open(path, 'w')
     for project in projects:
         ini.write('[%s]\n' % project)
