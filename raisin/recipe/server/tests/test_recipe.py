@@ -42,7 +42,13 @@ class RecipeTests(unittest.TestCase):
         Test getting the profiles
         """
         staging = SANDBOX
-        self.failUnless(get_profiles(staging) == None)
+        profiles_file = os.path.join(staging, 'profiles.csv')
+        profiles = open(profiles_file, 'w')
+        profiles.write("dummy1\tdummy2\nv1\tv2")
+        profiles.close()
+        found = get_profiles(staging)
+        expected =  [{'dummy2': 'v2', 'dummy1': 'v1'}]
+        self.failUnless(found == expected, found)
 
     def test_get_projects(self):
         """
