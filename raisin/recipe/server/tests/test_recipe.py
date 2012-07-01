@@ -78,7 +78,7 @@ class RecipeTests(unittest.TestCase):
         Test configuring the databases.ini
         """
         buildout_directory = SANDBOX 
-        dbs = None
+        dbs = [('dummy', 'db1', 'db2')]
         self.failUnless(databases_ini(buildout_directory, dbs) == None)
 
     def test_get_project_users(self):
