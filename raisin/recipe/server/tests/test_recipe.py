@@ -100,7 +100,7 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         projects = ['Foo']
-        project_users = {'Foo':'bar'}
+        project_users = {'Foo':['bar']}
         self.failUnless(pyramid_projects_ini(buildout_directory, projects, project_users) == None)
 
     def test_pyramid_projects_ini_missing_user(self):
