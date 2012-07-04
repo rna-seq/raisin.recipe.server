@@ -5,7 +5,7 @@ raisin.recipe.server
 import os
 from setuptools import setup, find_packages
 
-version = '1.1.1'
+version = '1.1.2'
 
 long_description = """The raisin.recipe.server package is a Buildout recipe used for
 creating the server configuration for Raisin, the web application used for publishing the 
