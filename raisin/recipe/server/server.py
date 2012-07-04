@@ -1,5 +1,8 @@
 import csv
 import os
+import logging
+
+logger = logging.getLogger('raisin.recipe.server.server')
 
 
 def read_csv(file_name):
@@ -35,6 +38,8 @@ def projects_ini(buildout_directory, projects):
         ini.write('    RNAseqPipelineCommon = %sCommon\n' % project)
         ini.write('\n')
     ini.close()
+    logger.info('Writing :%s' % path)
+
 
 def databases_ini(buildout_directory, dbs):
     """
@@ -77,6 +82,7 @@ def databases_ini(buildout_directory, dbs):
         ini.write('description = Contains all the statistics results\n')
         ini.write('\n')
     ini.close()
+    logger.info('Writing :%s' % path)
 
 def get_profiles(staging):
     profiles = read_csv(os.path.join(staging, 'profiles.csv'))
@@ -119,13 +125,10 @@ def pyramid_projects_ini(buildout_directory, projects, project_users):
     ini = open(path, 'w')
     for project in projects:
         ini.write('[%s]\n' % project)
-        # If no users are specified for a project, use the anonymous user
-        user_list = ['anonymous']
-        if project_users.has_key(project):
-            user_list = project_users[project]
-        ini.write('users = %s,\n' % ','.join(user_list))
+        ini.write('users = %s,\n' % ','.join(project_users[project]))
         ini.write('\n')
     ini.close()
+    logger.info('Writing :%s' % path)
 
 def get_parameters(buildout):
     vocabulary = buildout['parameter_vocabulary']
@@ -169,18 +172,28 @@ def misc_parameters_ini(buildout_directory, parameters):
         ini.write('column = %s\n' % parameter['column'])
         ini.write('\n')
     ini.close()
+    logger.info('Writing :%s' % path)
 
-def get_project_users(buildout):
+def get_project_users(buildout, projects):
     project_users = {}
-    for key, value in buildout['project_users'].items():
-        project_users[key] = value.split('\n')
+    for project in projects:
+        if project in buildout['project_users']:
+            project_users[project] = buildout['project_users'][project].split('\n')
+        else:
+            # If no users are specified for a project, use the anonymous user
+            project_users[project] = ['anonymous']
     return project_users
 
-def get_project_parameters(buildout):
+
+def get_project_parameters(buildout, projects):
     project_parameters = buildout['project_parameters']
     results = {}
-    for key, value in project_parameters.items():
-        results[key] = value.split("\n")
+    for project in projects:
+        if project in project_parameters:
+            results[project] = project_parameters[project].split("\n")
+        else:
+            # If no project parameters are given, use read_length
+            results[project] = ['read_length']
     return results
 
 def misc_project_parameters_ini(buildout_directory, project_parameters):
@@ -208,15 +221,17 @@ def misc_project_parameters_ini(buildout_directory, project_parameters):
         ini.write('parameters = %s,\n' % ', '.join(value))
         ini.write('\n')
     ini.close()
-
+    logger.info('Writing :%s' % path)
 
 def connections_mysql_ini(buildout_directory):
     """Create the mysql connection file"""
     path = os.path.join(buildout_directory, 'etc/connections')
     if not os.path.exists(path):
-            os.makedirs(path)
+        os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/connections/mysql.ini')
-    if not os.path.exists(path):
+    if os.path.exists(path):
+        logger.info('Keeping existing configuration file: %s' % path)
+    else:
         ini = open(path, 'w')
         ini.write("[raisin]\n")
         ini.write("port = 3306\n")
@@ -224,13 +239,16 @@ def connections_mysql_ini(buildout_directory):
         ini.write("user = raisin\n")
         ini.write("password = raisin\n")
         ini.close()
+        logger.info('Writing: %s' % path)
 
 def pyramid_development_ini(buildout_directory):
     path = os.path.join(buildout_directory, 'etc/pyramid')
     if not os.path.exists(path):
         os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/pyramid/development.ini')
-    if not os.path.exists(path):
+    if os.path.exists(path):
+        logger.info('Keeping existing configuration file: %s' % path)
+    else:
         ini = open(path, 'w')
         ini.write("""[app:main]
 use = egg:raisin.pyramid
@@ -279,13 +297,16 @@ format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
 
 # End logging configuration""")
         ini.close()
+        logger.info('Writing: %s' % path)
 
 def restish_development_ini(buildout_directory):
     path = os.path.join(buildout_directory, 'etc/restish')
     if not os.path.exists(path):
         os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/restish/development.ini')
-    if not os.path.exists(path):
+    if os.path.exists(path):
+        logger.info('Keeping existing configuration file: %s' % path)
+    else:
         ini = open(path, 'w')
         ini.write("""[DEFAULT]
 ; Application id used to prefix logs, errors, etc with something unique to this
@@ -354,36 +375,45 @@ formatter = generic
 format = %(asctime)s,%(msecs)03d %(levelname)-5.5s [%(name)s] %(message)s
 datefmt = %H:%M:%S""")
         ini.close()
+        logger.info('Writing: %s' % path)
 
 def restish_raisin_restish_ini(buildout_directory):
     path = os.path.join(buildout_directory, 'etc/restish')
     if not os.path.exists(path):
         os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/restish/raisin.restish.ini')
-    if not os.path.exists(path):
+    if os.path.exists(path):
+        logger.info('Keeping existing configuration file: %s' % path)
+    else:
         ini = open(path, 'w')
         ini.write("""[app:raisin.restish]
 use = egg:raisin.restish
 cache_dir = %(CACHE_DIR)s""")
         ini.close()
+        logger.info('Writing: %s' % path)
 
 def pyramid_users_ini(buildout_directory):
     path = os.path.join(buildout_directory, 'etc/pyramid')
     if not os.path.exists(path):
         os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/pyramid/users.ini')
-    if not os.path.exists(path):
+    if os.path.exists(path):
+        logger.info('Keeping existing configuration file: %s' % path)
+    else:
         ini = open(path, 'w')
         ini.write('''[raisin]
 password = "raisin"''')
         ini.close()
+        logger.info('Writing: %s' % path)
 
 def supervisord_conf(buildout_directory, mode):
     path = os.path.join(buildout_directory, 'etc/supervisor')
     if not os.path.exists(path):
         os.makedirs(path)
     path = os.path.join(buildout_directory, 'etc/supervisor/%s.conf' % mode)
-    if not os.path.exists(path):
+    if os.path.exists(path):
+        logger.info('Keeping existing configuration file: %s' % path)
+    else:
         conf = open(path, 'w')
         conf.write("""[supervisord]\n""")
         path = os.path.join(buildout_directory, "var/log")
@@ -430,6 +460,7 @@ def supervisord_conf(buildout_directory, mode):
         conf.write("""priority = 20\n""")
         conf.write("""redirect_stderr = false\n""")
         conf.close()
+        logger.info('Writing: %s' % path)
 
 def main(buildout, buildout_directory, staging):
     profiles = get_profiles(staging)
@@ -437,11 +468,11 @@ def main(buildout, buildout_directory, staging):
     projects_ini(buildout_directory, projects)
     dbs = get_dbs(profiles)
     databases_ini(buildout_directory, dbs)
-    project_users = get_project_users(buildout)
+    project_users = get_project_users(buildout, projects)
     pyramid_projects_ini(buildout_directory, projects, project_users)
     parameters = get_parameters(buildout)
     misc_parameters_ini(buildout_directory, parameters)
-    project_parameters = get_project_parameters(buildout)
+    project_parameters = get_project_parameters(buildout, projects)
     misc_project_parameters_ini(buildout_directory, project_parameters)
     connections_mysql_ini(buildout_directory)
     pyramid_development_ini(buildout_directory)

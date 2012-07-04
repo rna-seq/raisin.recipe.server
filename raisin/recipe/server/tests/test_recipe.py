@@ -92,7 +92,10 @@ class RecipeTests(unittest.TestCase):
         Test getting the project users
         """
         buildout = {'project_users': {'Project':'foo\nbar'}}
-        self.failUnless(get_project_users(buildout) == {'Project': ['foo','bar']})
+        projects = ['Project']
+        found = get_project_users(buildout, projects)
+        expected = {'Project': ['foo','bar']}
+        self.failUnless(found == expected, found)
 
     def test_pyramid_projects_ini(self):
         """
@@ -105,13 +108,17 @@ class RecipeTests(unittest.TestCase):
 
     def test_pyramid_projects_ini_missing_user(self):
         """
-        Test configuring the pyramid projects.ini with missing user
+        Test configuring the pyramid projects.ini with missing project user.
         """
         buildout_directory = SANDBOX
         projects = ['Foo']
         project_users = {}
-        self.failUnless(pyramid_projects_ini(buildout_directory, projects, project_users) == None)
-    
+        self.assertRaises(KeyError,
+                          pyramid_projects_ini,
+                          buildout_directory,
+                          projects,
+                          project_users)
+        
     def test_get_parameters(self):
         """
         Test getting the parameters
@@ -148,7 +155,10 @@ class RecipeTests(unittest.TestCase):
         Test getting the project parameters
         """
         buildout = {'project_parameters':{'Dummy':'foo\nbar'}}
-        self.failUnless(get_project_parameters(buildout) == {'Dummy':['foo','bar']})
+        projects = ['Dummy']
+        found = get_project_parameters(buildout, projects)
+        expected = {'Dummy':['foo','bar']}
+        self.failUnless(found == expected, found)
 
     def test_misc_project_parameters_ini(self):
         """
