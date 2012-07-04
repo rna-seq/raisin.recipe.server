@@ -1,5 +1,6 @@
 * text=auto !eol
 /CHANGES.txt -text
+/README.txt -text
 raisin/recipe/server/tests/README.txt -text
 raisin/recipe/server/tests/__init__.py -text
 raisin/recipe/server/tests/test_recipe.py -text
