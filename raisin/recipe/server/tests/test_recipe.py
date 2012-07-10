@@ -4,7 +4,6 @@ Test for raisin.recipe.transformation
 
 import os
 import unittest
-import shutil
 from pkg_resources import get_provider
 from raisin.recipe.server.server import get_profiles
 from raisin.recipe.server.server import get_projects
@@ -23,7 +22,8 @@ from raisin.recipe.server.server import restish_development_ini
 from raisin.recipe.server.server import restish_raisin_restish_ini
 from raisin.recipe.server.server import pyramid_users_ini
 from raisin.recipe.server.server import supervisord_conf
-
+from raisin.recipe.server.server import var_log_folder
+    
 PROVIDER = get_provider('raisin.recipe.server')
 SANDBOX = PROVIDER.get_resource_filename("", 'tests/sandbox/')
 PATH = os.path.join(SANDBOX, 'buildout')
@@ -216,6 +216,15 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         self.failUnless(supervisord_conf(buildout_directory, "production") == None)
+    
+    def test_var_log_folder(self):
+        """
+        Test that the var/log folder is created
+        """
+        path = os.path.join(SANDBOX, 'var/log')
+        var_log_folder(SANDBOX)
+        self.failUnless(os.path.exists(path))
+
     
 def test_suite():
     """

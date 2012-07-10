@@ -462,6 +462,16 @@ def supervisord_conf(buildout_directory, mode):
         conf.close()
         logger.info('Writing: %s' % path)
 
+
+def var_log_folder(buildout_directory):
+    """
+    Create the var/log folder needed when starting raisin with supervisord.
+    """
+    path = os.path.join(buildout_directory, 'var/log')
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+        
 def main(buildout, buildout_directory, staging):
     profiles = get_profiles(staging)
     projects = get_projects(profiles)
@@ -481,3 +491,4 @@ def main(buildout, buildout_directory, staging):
     pyramid_users_ini(buildout_directory)
     supervisord_conf(buildout_directory, "development")
     supervisord_conf(buildout_directory, "production")
+    var_log_folder(buildout_directory)
