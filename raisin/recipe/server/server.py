@@ -84,11 +84,13 @@ def databases_ini(buildout_directory, dbs):
     ini.close()
     logger.info('Writing :%s' % path)
 
+
 def get_profiles(staging):
     profiles = read_csv(os.path.join(staging, 'profiles.csv'))
     profiles = [profile for profile in profiles]
     profiles.sort()
     return profiles
+
 
 def get_projects(profiles):
     projects = set()
@@ -106,6 +108,7 @@ def get_dbs(profiles):
     dbs = list(dbs)
     dbs.sort()
     return dbs
+
 
 def pyramid_projects_ini(buildout_directory, projects, project_users):
     """
@@ -130,6 +133,7 @@ def pyramid_projects_ini(buildout_directory, projects, project_users):
     ini.close()
     logger.info('Writing :%s' % path)
 
+
 def get_parameters(buildout):
     vocabulary = buildout['parameter_vocabulary']
     categories = buildout['parameter_categories']
@@ -137,12 +141,13 @@ def get_parameters(buildout):
     columns = buildout['parameter_columns']
     parameters = {}
     for key, value in vocabulary.items():
-        parameters[key] = {'title':value,
-                           'category':categories[key],
-                           'type':types[key],
-                           'column':columns[key]
+        parameters[key] = {'title': value,
+                           'category': categories[key],
+                           'type': types[key],
+                           'column': columns[key]
                            }
     return parameters
+
 
 def misc_parameters_ini(buildout_directory, parameters):
     """
@@ -174,6 +179,7 @@ def misc_parameters_ini(buildout_directory, parameters):
     ini.close()
     logger.info('Writing :%s' % path)
 
+
 def get_project_users(buildout, projects):
     project_users = {}
     for project in projects:
@@ -195,6 +201,7 @@ def get_project_parameters(buildout, projects):
             # If no project parameters are given, use read_length
             results[project] = ['read_length']
     return results
+
 
 def misc_project_parameters_ini(buildout_directory, project_parameters):
     """
@@ -223,6 +230,7 @@ def misc_project_parameters_ini(buildout_directory, project_parameters):
     ini.close()
     logger.info('Writing :%s' % path)
 
+
 def connections_mysql_ini(buildout_directory):
     """Create the mysql connection file"""
     path = os.path.join(buildout_directory, 'etc/connections')
@@ -240,6 +248,7 @@ def connections_mysql_ini(buildout_directory):
         ini.write("password = raisin\n")
         ini.close()
         logger.info('Writing: %s' % path)
+
 
 def pyramid_development_ini(buildout_directory):
     path = os.path.join(buildout_directory, 'etc/pyramid')
@@ -298,6 +307,7 @@ format = %(asctime)s %(levelname)-5.5s [%(name)s][%(threadName)s] %(message)s
 # End logging configuration""")
         ini.close()
         logger.info('Writing: %s' % path)
+
 
 def restish_development_ini(buildout_directory):
     path = os.path.join(buildout_directory, 'etc/restish')
@@ -377,6 +387,7 @@ datefmt = %H:%M:%S""")
         ini.close()
         logger.info('Writing: %s' % path)
 
+
 def restish_raisin_restish_ini(buildout_directory):
     path = os.path.join(buildout_directory, 'etc/restish')
     if not os.path.exists(path):
@@ -392,6 +403,7 @@ cache_dir = %(CACHE_DIR)s""")
         ini.close()
         logger.info('Writing: %s' % path)
 
+
 def pyramid_users_ini(buildout_directory):
     path = os.path.join(buildout_directory, 'etc/pyramid')
     if not os.path.exists(path):
@@ -405,6 +417,7 @@ def pyramid_users_ini(buildout_directory):
 password = "raisin"''')
         ini.close()
         logger.info('Writing: %s' % path)
+
 
 def supervisord_conf(buildout_directory, mode):
     path = os.path.join(buildout_directory, 'etc/supervisor')
