@@ -10,6 +10,9 @@ logger = logging.getLogger('raisin.recipe.server.server')
 
 
 def read_csv(file_name):
+    """
+    Read a CSV file and return its content as a list of dictionaries.
+    """
     return [line for line in csv.DictReader(open(file_name, 'r'),
                                             delimiter='\t',
                                             skipinitialspace=True)]
@@ -90,13 +93,18 @@ def databases_ini(buildout_directory, dbs):
 
 
 def get_profiles(staging):
+    """
+    Return the profiles as a sorted list of dictionaries.
+    """
     profiles = read_csv(os.path.join(staging, 'profiles.csv'))
-    profiles = [profile for profile in profiles]
     profiles.sort()
     return profiles
 
 
 def get_projects(profiles):
+    """
+    Return a sorted list of unique projects.
+    """
     projects = set()
     for profile in profiles:
         projects.add(profile['project_id'])
@@ -106,6 +114,10 @@ def get_projects(profiles):
 
 
 def get_dbs(profiles):
+    """
+    Return a sorted list of tuples containing the project and its
+    DB and COMMONDB.
+    """
     dbs = set()
     for profile in profiles:
         dbs.add((profile['project_id'], profile['DB'], profile['COMMONDB'],))
@@ -139,6 +151,9 @@ def pyramid_projects_ini(buildout_directory, projects, project_users):
 
 
 def get_parameters(buildout):
+    """
+    Extract the parameter configuration from the buildout.
+    """
     vocabulary = buildout['parameter_vocabulary']
     categories = buildout['parameter_categories']
     types = buildout['parameter_types']
