@@ -1,3 +1,7 @@
+"""
+Produce server configurations for raisin.
+"""
+
 import csv
 import os
 import logging
@@ -184,7 +188,7 @@ def get_project_users(buildout, projects):
     project_users = {}
     for project in projects:
         if project in buildout['project_users']:
-            users  = buildout['project_users'][project]
+            users = buildout['project_users'][project]
             project_users[project] = users.split('\n')
         else:
             # If no users are specified for a project, use the anonymous user
