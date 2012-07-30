@@ -23,7 +23,7 @@ from raisin.recipe.server.server import restish_raisin_restish_ini
 from raisin.recipe.server.server import pyramid_users_ini
 from raisin.recipe.server.server import supervisord_conf
 from raisin.recipe.server.server import var_log_folder
-    
+
 PROVIDER = get_provider('raisin.recipe.server')
 SANDBOX = PROVIDER.get_resource_filename("", 'tests/sandbox/')
 PATH = os.path.join(SANDBOX, 'buildout')
@@ -36,7 +36,7 @@ class RecipeTests(unittest.TestCase):
 
     def setUp(self):  # pylint: disable=C0103
         pass
-        
+
     def test_get_profiles(self):
         """
         Test getting the profiles
@@ -78,12 +78,12 @@ class RecipeTests(unittest.TestCase):
         found = get_dbs(profiles)
         expected = [('dummy', 'db1', 'db2')]
         self.failUnless(found == expected, found)
-    
+
     def test_databases_ini(self):
         """
         Test configuring the databases.ini
         """
-        buildout_directory = SANDBOX 
+        buildout_directory = SANDBOX
         dbs = [('dummy', 'db1', 'db2')]
         self.failUnless(databases_ini(buildout_directory, dbs) == None)
 
@@ -118,7 +118,7 @@ class RecipeTests(unittest.TestCase):
                           buildout_directory,
                           projects,
                           project_users)
-        
+
     def test_get_parameters(self):
         """
         Test getting the parameters
@@ -136,7 +136,7 @@ class RecipeTests(unittest.TestCase):
                                   }
         found = get_parameters(buildout)
         self.failUnless(found == expected, found)
-    
+
     def test_misc_parameters_ini(self):
         """
         Test configuring misc parameters.ini
@@ -149,7 +149,7 @@ class RecipeTests(unittest.TestCase):
                                       }
                      }
         self.failUnless(misc_parameters_ini(buildout_directory, parameters) == None)
-    
+
     def test_get_project_parameters(self):
         """
         Test getting the project parameters
@@ -167,7 +167,7 @@ class RecipeTests(unittest.TestCase):
         buildout_directory = SANDBOX
         project_parameters = {'Dummy':['read_length']}
         self.failUnless(misc_project_parameters_ini(buildout_directory, project_parameters) == None)
-    
+
     def test_connections_mysql_ini(self):
         """
         Test configuring the connections mysql.ini
@@ -181,28 +181,28 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         self.failUnless(pyramid_development_ini(buildout_directory) == None)
-    
+
     def test_restish_development_ini(self):
         """
         Test configuring the restish development.ini
         """
         buildout_directory = SANDBOX
         self.failUnless(restish_development_ini(buildout_directory) == None)
-    
+
     def test_restish_raisin_restish_ini(self):
         """
         Test configuring the restish raisin.restish.ini
         """
         buildout_directory = SANDBOX
         self.failUnless(restish_raisin_restish_ini(buildout_directory) == None)
-    
+
     def test_pyramid_users_ini(self):
         """
         Test configuring the pyramid users.ini
         """
         buildout_directory = SANDBOX
         self.failUnless(pyramid_users_ini(buildout_directory) == None)
-    
+
     def test_supervisord_conf_development(self):
         """
         Test configuring the supervisord.conf for development
@@ -216,7 +216,7 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         self.failUnless(supervisord_conf(buildout_directory, "production") == None)
-    
+
     def test_var_log_folder(self):
         """
         Test that the var/log folder is created
@@ -225,7 +225,7 @@ class RecipeTests(unittest.TestCase):
         var_log_folder(SANDBOX)
         self.failUnless(os.path.exists(path))
 
-    
+
 def test_suite():
     """
     Run the test suite

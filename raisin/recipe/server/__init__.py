@@ -16,7 +16,7 @@ class Recipe(object):
         staging = self.buildout['transform']['staging']
         buildout_directory = self.buildout['buildout']['directory']
 
-        for etc_path in ['etc/projects', 
+        for etc_path in ['etc/projects',
                          'etc/databases',
                          'etc/pyramid',
                          'etc/misc']:

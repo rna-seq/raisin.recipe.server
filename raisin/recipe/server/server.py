@@ -14,11 +14,11 @@ def read_csv(file_name):
 def projects_ini(buildout_directory, projects):
     """
     Produce a projects.ini file:
-    
+
     etc/projects/projects.ini
-    
+
     Like this:
-    
+
     [Test]
     projects = Test,
         [[dbs]]
@@ -48,12 +48,12 @@ def databases_ini(buildout_directory, dbs):
     etc/databases/databases.ini
 
     Like this:
-    
+
     [Test]
     connection = raisin
     db = Test_RNAseqPipeline
     description = Contains the meta data
-    
+
     [TestCommon]
     connection = raisin
     db = Test_RNAseqPipelineCommon
@@ -110,11 +110,11 @@ def get_dbs(profiles):
 def pyramid_projects_ini(buildout_directory, projects, project_users):
     """
     Produce a projects.ini file for pyramid:
-    
+
     etc/pyramid/projects.ini
-    
+
     Like this:
-    
+
     [Test]
     users = "raisin",
     """
@@ -143,15 +143,15 @@ def get_parameters(buildout):
                            'column':columns[key]
                            }
     return parameters
-    
+
 def misc_parameters_ini(buildout_directory, parameters):
     """
     Produce a parameters.ini file:
-    
+
     etc/misc/parameters.ini
-    
+
     Like this:
-    
+
     [partition]
     title = Partition
     type = string
@@ -199,11 +199,11 @@ def get_project_parameters(buildout, projects):
 def misc_project_parameters_ini(buildout_directory, project_parameters):
     """
     Produce a project_parameters.ini file:
-    
+
     etc/misc/project_parameters.ini
-    
+
     Like this:
-    
+
     [Test]
     parameters = 'read_length',
     """
@@ -471,7 +471,7 @@ def var_log_folder(buildout_directory):
     if not os.path.exists(path):
         os.makedirs(path)
 
-        
+
 def main(buildout, buildout_directory, staging):
     profiles = get_profiles(staging)
     projects = get_projects(profiles)

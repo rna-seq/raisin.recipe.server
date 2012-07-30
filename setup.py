@@ -8,8 +8,8 @@ from setuptools import setup, find_packages
 version = '1.1.4'
 
 long_description = """The raisin.recipe.server package is a Buildout recipe used for
-creating the server configuration for Raisin, the web application used for publishing the 
-summary statistics of Grape, a pipeline used for processing and analyzing RNA-Seq 
+creating the server configuration for Raisin, the web application used for publishing the
+summary statistics of Grape, a pipeline used for processing and analyzing RNA-Seq
 data."""
 entry_point = 'raisin.recipe.server:Recipe'
 entry_points = {"zc.buildout": [
