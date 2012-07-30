@@ -182,7 +182,7 @@ def misc_parameters_ini(buildout_directory, parameters):
 
 def get_project_users(buildout, projects):
     project_users = {}
-    for project in projects:    
+    for project in projects:
         if project in buildout['project_users']:
             users  = buildout['project_users'][project]
             project_users[project] = users.split('\n')
@@ -454,11 +454,13 @@ def supervisord_conf(buildout_directory, mode):
         conf.write("""password = \n""")
         conf.write("""\n""")
         conf.write("""[rpcinterface:supervisor]\n""")
-        conf.write("""supervisor.rpcinterface_factory=supervisor.rpcinterface:make_main_rpcinterface\n""")
+        conf.write("""supervisor.rpcinterface_factory=""")
+        conf.write("""supervisor.rpcinterface:make_main_rpcinterface\n""")
         conf.write("""\n""")
         conf.write("""[program:restish]\n""")
         path = os.path.join(buildout_directory, "bin/pserve")
-        config_file = os.path.join(buildout_directory, "etc/restish/%s.ini" % mode)
+        ini = "etc/restish/%s.ini" % mode
+        config_file = os.path.join(buildout_directory, ini)
         conf.write("""command = %s %s\n""" % (path, config_file))
         conf.write("""process_name = restish\n""")
         conf.write("""directory = %s\n""" % buildout_directory)
@@ -467,7 +469,8 @@ def supervisord_conf(buildout_directory, mode):
         conf.write("""\n""")
         conf.write("""[program:pyramid]\n""")
         path = os.path.join(buildout_directory, "bin/pserve")
-        config_file = os.path.join(buildout_directory, "etc/pyramid/%s.ini" % mode)
+        ini = "etc/pyramid/%s.ini" % mode
+        config_file = os.path.join(buildout_directory, ini)
         conf.write("""command = %s %s\n""" % (path, config_file))
         conf.write("""process_name = pyramid\n""")
         conf.write("""directory = %s\n""" % buildout_directory)
