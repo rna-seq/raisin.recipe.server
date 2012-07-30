@@ -200,6 +200,11 @@ def misc_parameters_ini(buildout_directory, parameters):
 
 
 def get_project_users(buildout, projects):
+    """
+    Return a dictionary projects containing a list of their users.
+    If no users are specified explicitly, make it available for
+    anonymous.
+    """
     project_users = {}
     for project in projects:
         if project in buildout['project_users']:
@@ -212,6 +217,11 @@ def get_project_users(buildout, projects):
 
 
 def get_project_parameters(buildout, projects):
+    """
+    Return a dictionary of projects and their project parameters.
+    If no parameters are specified explicitly, make use of the
+    read_length parameter.
+    """
     project_parameters = buildout['project_parameters']
     results = {}
     for project in projects:
