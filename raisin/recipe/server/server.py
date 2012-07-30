@@ -182,9 +182,10 @@ def misc_parameters_ini(buildout_directory, parameters):
 
 def get_project_users(buildout, projects):
     project_users = {}
-    for project in projects:
+    for project in projects:    
         if project in buildout['project_users']:
-            project_users[project] = buildout['project_users'][project].split('\n')
+            users  = buildout['project_users'][project]
+            project_users[project] = users.split('\n')
         else:
             # If no users are specified for a project, use the anonymous user
             project_users[project] = ['anonymous']
