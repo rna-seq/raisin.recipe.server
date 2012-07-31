@@ -29,12 +29,17 @@ SANDBOX = PROVIDER.get_resource_filename("", 'tests/sandbox/')
 CONTROL = PROVIDER.get_resource_filename("", 'tests/control/')
 PATH = os.path.join(SANDBOX, 'buildout')
 
+
 def files_are_equal(path):
+    """
+    Compares files produced in the sandbox with the same file in the control folder.
+    """
     sandbox = os.path.join(SANDBOX, path)
     control = os.path.join(CONTROL, path)
     sandbox_file = open(sandbox, 'r')
     control_file = open(control, 'r')
     return sandbox_file.read() == control_file.read()
+
 
 class RecipeTests(unittest.TestCase):
     """
@@ -54,7 +59,7 @@ class RecipeTests(unittest.TestCase):
         profiles.write("dummy1\tdummy2\nv1\tv2")
         profiles.close()
         found = get_profiles(staging)
-        expected =  [{'dummy2': 'v2', 'dummy1': 'v1'}]
+        expected = [{'dummy2': 'v2', 'dummy1': 'v1'}]
         self.failUnless(found == expected, found)
 
     def test_get_projects(self):
@@ -72,7 +77,8 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         projects = ['Test']
-        self.failUnless(projects_ini(buildout_directory, projects) == None)
+        projects_ini(buildout_directory, projects)
+        self.failUnless(files_are_equal('etc/projects/projects.ini'))
 
     def test_get_dbs(self):
         """
@@ -99,10 +105,10 @@ class RecipeTests(unittest.TestCase):
         """
         Test getting the project users
         """
-        buildout = {'project_users': {'Project':'foo\nbar'}}
+        buildout = {'project_users': {'Project': 'foo\nbar'}}
         projects = ['Project']
         found = get_project_users(buildout, projects)
-        expected = {'Project': ['foo','bar']}
+        expected = {'Project': ['foo', 'bar']}
         self.failUnless(found == expected, found)
 
     def test_pyramid_projects_ini(self):
@@ -111,7 +117,7 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         projects = ['Foo']
-        project_users = {'Foo':['bar']}
+        project_users = {'Foo': ['bar']}
         pyramid_projects_ini(buildout_directory, projects, project_users)
         self.failUnless(files_are_equal('etc/projects/projects.ini'))
 
@@ -151,11 +157,11 @@ class RecipeTests(unittest.TestCase):
         Test configuring misc parameters.ini
         """
         buildout_directory = SANDBOX
-        parameters = {'read_length' : {'title': 'Read Length',
-                                       'category': 'experiment',
-                                       'type': 'integer',
-                                       'column': 'read_length'
-                                      }
+        parameters = {'read_length': {'title': 'Read Length',
+                                      'category': 'experiment',
+                                      'type': 'integer',
+                                      'column': 'read_length'
+                                     }
                      }
         misc_parameters_ini(buildout_directory, parameters)
         self.failUnless(files_are_equal('etc/misc/parameters.ini'))
@@ -164,10 +170,10 @@ class RecipeTests(unittest.TestCase):
         """
         Test getting the project parameters
         """
-        buildout = {'project_parameters':{'Dummy':'foo\nbar'}}
+        buildout = {'project_parameters': {'Dummy': 'foo\nbar'}}
         projects = ['Dummy']
         found = get_project_parameters(buildout, projects)
-        expected = {'Dummy':['foo','bar']}
+        expected = {'Dummy': ['foo', 'bar']}
         self.failUnless(found == expected, found)
 
     def test_misc_project_parameters_ini(self):
@@ -175,10 +181,9 @@ class RecipeTests(unittest.TestCase):
         Test configuring the project parameters.ini
         """
         buildout_directory = SANDBOX
-        project_parameters = {'Dummy':['read_length']}
+        project_parameters = {'Dummy': ['read_length']}
         misc_project_parameters_ini(buildout_directory, project_parameters)
         self.failUnless(files_are_equal('etc/misc/project_parameters.ini'))
-
 
     def test_connections_mysql_ini(self):
         """
