@@ -519,6 +519,9 @@ def var_log_folder(buildout_directory):
 
 
 def main(buildout, buildout_directory, staging):
+    """
+    Produce the configuration files for the servers.
+    """
     profiles = get_profiles(staging)
     projects = get_projects(profiles)
     projects_ini(buildout_directory, projects)
