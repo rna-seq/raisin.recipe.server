@@ -32,7 +32,8 @@ PATH = os.path.join(SANDBOX, 'buildout')
 
 def files_are_equal(path):
     """
-    Compares files produced in the sandbox with the same file in the control folder.
+    Compares files produced in the sandbox with the same file in the
+    control folder.
     """
     sandbox = os.path.join(SANDBOX, path)
     control = os.path.join(CONTROL, path)

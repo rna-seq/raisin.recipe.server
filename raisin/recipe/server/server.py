@@ -518,6 +518,31 @@ def var_log_folder(buildout_directory):
     make_path(buildout_directory, 'var/log')
 
 
+def downloads(buildout, buildout_directory, dbs):
+    """
+    Create the download configuration.
+    """
+    make_path(buildout_directory, 'etc/download')
+    path = os.path.join(buildout_directory, 'etc/download/download.conf')
+    conf = open(path, 'w')
+    download_path = buildout['project_download']['path']
+    exclude_projects = buildout['project_download']['exclude_projects'].split('\n')
+    download_folders = buildout['project_download_folder']
+    for project, db, commondb in dbs:
+        if project in exclude_projects:
+            continue 
+        # Add project to download path
+        path = os.path.join(download_path, project)
+        if project in download_folders:
+            folder = download_folders[project]
+            # Add folder to download path
+            path = os.path.join(path, folder)
+        conf.write("""[%s]\n""" % project)
+        conf.write("""path = %s\n""" % path)
+        conf.write("""DB = %s\n""" % db)
+        conf.write("""COMMONDB = %s\n\n""" % commondb)        
+    conf.close()
+
 def main(buildout, buildout_directory, staging):
     """
     Produce the configuration files for the servers.
@@ -541,3 +566,4 @@ def main(buildout, buildout_directory, staging):
     supervisord_conf(buildout_directory, "development")
     supervisord_conf(buildout_directory, "production")
     var_log_folder(buildout_directory)
+    downloads(buildout, buildout_directory, dbs)
