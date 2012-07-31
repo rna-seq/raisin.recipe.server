@@ -3,5 +3,17 @@
 /README.txt -text
 raisin/recipe/server/tests/README.txt -text
 raisin/recipe/server/tests/__init__.py -text
+raisin/recipe/server/tests/control/etc/connections/mysql.ini -text
+raisin/recipe/server/tests/control/etc/databases/databases.ini -text
+raisin/recipe/server/tests/control/etc/misc/parameters.ini -text
+raisin/recipe/server/tests/control/etc/misc/project_parameters.ini -text
+raisin/recipe/server/tests/control/etc/projects/projects.ini -text
+raisin/recipe/server/tests/control/etc/pyramid/development.ini -text
+raisin/recipe/server/tests/control/etc/pyramid/projects.ini -text
+raisin/recipe/server/tests/control/etc/pyramid/users.ini -text
+raisin/recipe/server/tests/control/etc/restish/development.ini -text
+raisin/recipe/server/tests/control/etc/restish/raisin.restish.ini -text
+raisin/recipe/server/tests/control/etc/supervisor/development.conf -text
+raisin/recipe/server/tests/control/etc/supervisor/production.conf -text
 raisin/recipe/server/tests/test_recipe.py -text
 /version.txt -text
