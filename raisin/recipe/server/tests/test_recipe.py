@@ -56,7 +56,7 @@ class RecipeTests(unittest.TestCase):
         found = get_profiles(staging)
         expected =  [{'dummy2': 'v2', 'dummy1': 'v1'}]
         self.failUnless(found == expected, found)
-        
+
     def test_get_projects(self):
         """
         Test getting the projects
