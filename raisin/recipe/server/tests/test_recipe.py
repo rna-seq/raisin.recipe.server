@@ -26,8 +26,15 @@ from raisin.recipe.server.server import var_log_folder
 
 PROVIDER = get_provider('raisin.recipe.server')
 SANDBOX = PROVIDER.get_resource_filename("", 'tests/sandbox/')
+CONTROL = PROVIDER.get_resource_filename("", 'tests/control/')
 PATH = os.path.join(SANDBOX, 'buildout')
 
+def files_are_equal(path):
+    sandbox = os.path.join(SANDBOX, path)
+    control = os.path.join(CONTROL, path)
+    sandbox_file = open(sandbox, 'r')
+    control_file = open(control, 'r')
+    return sandbox_file.read() == control_file.read()
 
 class RecipeTests(unittest.TestCase):
     """
@@ -49,7 +56,7 @@ class RecipeTests(unittest.TestCase):
         found = get_profiles(staging)
         expected =  [{'dummy2': 'v2', 'dummy1': 'v1'}]
         self.failUnless(found == expected, found)
-
+        
     def test_get_projects(self):
         """
         Test getting the projects
@@ -85,7 +92,8 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         dbs = [('dummy', 'db1', 'db2')]
-        self.failUnless(databases_ini(buildout_directory, dbs) == None)
+        databases_ini(buildout_directory, dbs)
+        self.failUnless(files_are_equal('etc/databases/databases.ini'))
 
     def test_get_project_users(self):
         """
@@ -104,7 +112,8 @@ class RecipeTests(unittest.TestCase):
         buildout_directory = SANDBOX
         projects = ['Foo']
         project_users = {'Foo':['bar']}
-        self.failUnless(pyramid_projects_ini(buildout_directory, projects, project_users) == None)
+        pyramid_projects_ini(buildout_directory, projects, project_users)
+        self.failUnless(files_are_equal('etc/projects/projects.ini'))
 
     def test_pyramid_projects_ini_missing_user(self):
         """
@@ -148,7 +157,8 @@ class RecipeTests(unittest.TestCase):
                                        'column': 'read_length'
                                       }
                      }
-        self.failUnless(misc_parameters_ini(buildout_directory, parameters) == None)
+        misc_parameters_ini(buildout_directory, parameters)
+        self.failUnless(files_are_equal('etc/misc/parameters.ini'))
 
     def test_get_project_parameters(self):
         """
@@ -166,56 +176,65 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         project_parameters = {'Dummy':['read_length']}
-        self.failUnless(misc_project_parameters_ini(buildout_directory, project_parameters) == None)
+        misc_project_parameters_ini(buildout_directory, project_parameters)
+        self.failUnless(files_are_equal('etc/misc/project_parameters.ini'))
+
 
     def test_connections_mysql_ini(self):
         """
         Test configuring the connections mysql.ini
         """
         buildout_directory = SANDBOX
-        self.failUnless(connections_mysql_ini(buildout_directory) == None)
+        connections_mysql_ini(buildout_directory)
+        self.failUnless(files_are_equal('etc/connections/mysql.ini'))
 
     def test_pyramid_development_ini(self):
         """
         Test configuring the pyramid development.ini
         """
         buildout_directory = SANDBOX
-        self.failUnless(pyramid_development_ini(buildout_directory) == None)
+        pyramid_development_ini(buildout_directory)
+        self.failUnless(files_are_equal('etc/pyramid/development.ini'))
 
     def test_restish_development_ini(self):
         """
         Test configuring the restish development.ini
         """
         buildout_directory = SANDBOX
-        self.failUnless(restish_development_ini(buildout_directory) == None)
+        restish_development_ini(buildout_directory)
+        self.failUnless(files_are_equal('etc/restish/development.ini'))
 
     def test_restish_raisin_restish_ini(self):
         """
         Test configuring the restish raisin.restish.ini
         """
         buildout_directory = SANDBOX
-        self.failUnless(restish_raisin_restish_ini(buildout_directory) == None)
+        restish_raisin_restish_ini(buildout_directory)
+        self.failUnless(files_are_equal('etc/restish/raisin.restish.ini'))
 
     def test_pyramid_users_ini(self):
         """
         Test configuring the pyramid users.ini
         """
         buildout_directory = SANDBOX
-        self.failUnless(pyramid_users_ini(buildout_directory) == None)
+        pyramid_users_ini(buildout_directory)
+        self.failUnless(files_are_equal('etc/supervisor/development.conf'))
 
     def test_supervisord_conf_development(self):
         """
         Test configuring the supervisord.conf for development
         """
         buildout_directory = SANDBOX
-        self.failUnless(supervisord_conf(buildout_directory, "development") == None)
+        supervisord_conf(buildout_directory, "development")
+        self.failUnless(files_are_equal('etc/supervisor/development.conf'))
 
     def test_supervisord_conf_production(self):
         """
         Test configuring the supervisord.conf for production
         """
         buildout_directory = SANDBOX
-        self.failUnless(supervisord_conf(buildout_directory, "production") == None)
+        supervisord_conf(buildout_directory, "production")
+        self.failUnless(files_are_equal('etc/supervisor/production.conf'))
 
     def test_var_log_folder(self):
         """
