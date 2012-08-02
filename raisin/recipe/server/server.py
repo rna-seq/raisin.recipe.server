@@ -5,6 +5,7 @@ Produce server configurations for raisin.
 import csv
 import os
 import logging
+import urlparse
 
 logger = logging.getLogger('raisin.recipe.server.server')
 
@@ -364,6 +365,7 @@ pickles_cache_path = %(here)s/../../cache
 mysql_connections = %(here)s/../connections/mysql.ini
 mysql_databases = %(here)s/../databases/databases.ini
 projects = %(here)s/../projects/projects.ini
+downloads = %(here)s/../projects/downloads.ini
 parameters = %(here)s/../misc/parameters.ini
 project_parameters = %(here)s/../misc/project_parameters.ini
 sqlite3_database = %(here)s/../../etl/database/database.db
@@ -522,10 +524,11 @@ def downloads(buildout, buildout_directory, dbs):
     """
     Create the downloads configuration.
     """
-    make_path(buildout_directory, 'etc/downloads')
-    path = os.path.join(buildout_directory, 'etc/downloads/downloads.conf')
+    make_path(buildout_directory, 'etc/projects')
+    path = os.path.join(buildout_directory, 'etc/projects/downloads.ini')
     conf = open(path, 'w')
     downloads_path = buildout['project_downloads']['path']
+    downloads_url = buildout['project_downloads']['url']
     exclude_projects = buildout['project_downloads']['exclude_projects'].split('\n')
     downloads_folders = buildout['project_downloads_folder']
     for project, db, commondb in dbs:
@@ -533,12 +536,15 @@ def downloads(buildout, buildout_directory, dbs):
             continue 
         # Add project to downloads path
         path = os.path.join(downloads_path, project)
+        url = urlparse.urljoin(downloads_url, "%s/" % project)
         if project in downloads_folders:
             folder = downloads_folders[project]
             # Add folder to downloads path
             path = os.path.join(path, folder)
+            url = urlparse.urljoin(url, "%s/" % folder)
         conf.write("""[%s]\n""" % project)
         conf.write("""path = %s\n""" % path)
+        conf.write("""url = %s\n""" % url)
         conf.write("""DB = %s\n""" % db)
         conf.write("""COMMONDB = %s\n\n""" % commondb)        
     conf.close()
