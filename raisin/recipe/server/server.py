@@ -520,22 +520,22 @@ def var_log_folder(buildout_directory):
 
 def downloads(buildout, buildout_directory, dbs):
     """
-    Create the download configuration.
+    Create the downloads configuration.
     """
-    make_path(buildout_directory, 'etc/download')
-    path = os.path.join(buildout_directory, 'etc/download/download.conf')
+    make_path(buildout_directory, 'etc/downloads')
+    path = os.path.join(buildout_directory, 'etc/downloads/downloads.conf')
     conf = open(path, 'w')
-    download_path = buildout['project_download']['path']
-    exclude_projects = buildout['project_download']['exclude_projects'].split('\n')
-    download_folders = buildout['project_download_folder']
+    downloads_path = buildout['project_downloads']['path']
+    exclude_projects = buildout['project_downloads']['exclude_projects'].split('\n')
+    downloads_folders = buildout['project_downloads_folder']
     for project, db, commondb in dbs:
         if project in exclude_projects:
             continue 
-        # Add project to download path
-        path = os.path.join(download_path, project)
-        if project in download_folders:
-            folder = download_folders[project]
-            # Add folder to download path
+        # Add project to downloads path
+        path = os.path.join(downloads_path, project)
+        if project in downloads_folders:
+            folder = downloads_folders[project]
+            # Add folder to downloads path
             path = os.path.join(path, folder)
         conf.write("""[%s]\n""" % project)
         conf.write("""path = %s\n""" % path)
