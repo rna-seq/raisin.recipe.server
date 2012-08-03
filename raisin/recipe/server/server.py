@@ -359,9 +359,7 @@ ERROR_EMAIL_TO = %(APP_ID)s
 
 CACHE_DIR = %(here)s/cache
 
-use_pickles_cache = False
 use_sql_database = True
-pickles_cache_path = %(here)s/../../cache
 mysql_connections = %(here)s/../connections/mysql.ini
 mysql_databases = %(here)s/../databases/databases.ini
 projects = %(here)s/../projects/projects.ini
