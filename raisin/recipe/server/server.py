@@ -531,7 +531,7 @@ def downloads(buildout, buildout_directory, dbs):
     downloads_folders = buildout['project_downloads_folder']
     for project, db, commondb in dbs:
         if project in exclude_projects:
-            continue 
+            continue
         # Add project to downloads path
         path = os.path.join(downloads_path, project)
         url = urlparse.urljoin(downloads_url, "%s/" % project)
@@ -544,7 +544,7 @@ def downloads(buildout, buildout_directory, dbs):
         conf.write("""path = %s\n""" % path)
         conf.write("""url = %s\n""" % url)
         conf.write("""DB = %s\n""" % db)
-        conf.write("""COMMONDB = %s\n\n""" % commondb)        
+        conf.write("""COMMONDB = %s\n\n""" % commondb)
     conf.close()
 
 def main(buildout, buildout_directory, staging):
