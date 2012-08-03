@@ -1,7 +1,11 @@
 1.1.5 (2012-08-03)
 ==================
 
+- Write downloads configuration file
+
 - Do not configure use_pickles_cache and pickles_cache_path any more
+
+- Improved unit tests
 
 1.1.4 (2012-07-20)
 ==================
