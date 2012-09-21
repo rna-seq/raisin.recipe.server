@@ -464,49 +464,49 @@ def supervisord_conf(buildout_directory, mode):
     path = os.path.join(buildout_directory, "var/log")
     conf.write("""childlogdir = %s\n""" % path)
     path = os.path.join(buildout_directory, "var/log/supervisord.log")
-    conf.write("""logfile = %s\n""" % path,
-               """logfile_maxbytes = 50MB\n""",
-               """logfile_backups = 10\n""",
-               """loglevel = info\n""")
+    conf.write("""logfile = %s\n""" % path)
+    conf.write("""logfile_maxbytes = 50MB\n""")
+    conf.write("""logfile_backups = 10\n""")
+    conf.write("""loglevel = info\n""")
     path = os.path.join(buildout_directory, "var/supervisord.pid")
-    conf.write("""pidfile = %s\n""" % path,
-               """umask = 022\n""",
-               """nodaemon = false\n""",
-               """nocleanup = false\n""",
-               """\n""",
-               """[inet_http_server]\n""",
-               """port = 127.0.0.1:9001\n""",
-               """username = \n""",
-               """password = \n""",
-               """\n""",
-               """[supervisorctl]\n""",
-               """serverurl = http://127.0.0.1:9001\n""",
-               """username = \n""",
-               """password = \n""",
-               """\n""",
-               """[rpcinterface:supervisor]\n""",
-               """supervisor.rpcinterface_factory=""",
-               """supervisor.rpcinterface:make_main_rpcinterface\n""",
-               """\n""",
-               """[program:restish]\n""")
+    conf.write("""pidfile = %s\n""" % path)
+    conf.write("""umask = 022\n""")
+    conf.write("""nodaemon = false\n""")
+    conf.write("""nocleanup = false\n""")
+    conf.write("""\n""")
+    conf.write("""[inet_http_server]\n""")
+    conf.write("""port = 127.0.0.1:9001\n""")
+    conf.write("""username = \n""")
+    conf.write("""password = \n""")
+    conf.write("""\n""")
+    conf.write("""[supervisorctl]\n""")
+    conf.write("""serverurl = http://127.0.0.1:9001\n""")
+    conf.write("""username = \n""")
+    conf.write("""password = \n""")
+    conf.write("""\n""")
+    conf.write("""[rpcinterface:supervisor]\n""")
+    conf.write("""supervisor.rpcinterface_factory=""")
+    conf.write("""supervisor.rpcinterface:make_main_rpcinterface\n""")
+    conf.write("""\n""")
+    conf.write("""[program:restish]\n""")
     path = os.path.join(buildout_directory, "bin/pserve")
     ini = "etc/restish/%s.ini" % mode
     config_file = os.path.join(buildout_directory, ini)
-    conf.write("""command = %s %s\n""" % (path, config_file),
-               """process_name = restish\n""",
-               """directory = %s\n""" % buildout_directory,
-               """priority = 10\n""",
-               """redirect_stderr = false\n""",
-               """\n""",
-               """[program:pyramid]\n""")
+    conf.write("""command = %s %s\n""" % (path, config_file))
+    conf.write("""process_name = restish\n""")
+    conf.write("""directory = %s\n""" % buildout_directory)
+    conf.write("""priority = 10\n""")
+    conf.write("""redirect_stderr = false\n""")
+    conf.write("""\n""")
+    conf.write("""[program:pyramid]\n""")
     path = os.path.join(buildout_directory, "bin/pserve")
     ini = "etc/pyramid/%s.ini" % mode
     config_file = os.path.join(buildout_directory, ini)
-    conf.write("""command = %s %s\n""" % (path, config_file),
-               """process_name = pyramid\n""",
-               """directory = %s\n""" % buildout_directory,
-               """priority = 20\n""",
-               """redirect_stderr = false\n""")
+    conf.write("""command = %s %s\n""" % (path, config_file))
+    conf.write("""process_name = pyramid\n""")
+    conf.write("""directory = %s\n""" % buildout_directory)
+    conf.write("""priority = 20\n""")
+    conf.write("""redirect_stderr = false\n""")
     conf.close()
     logger.info('Writing: %s' % path)
 
