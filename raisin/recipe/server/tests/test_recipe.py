@@ -25,8 +25,8 @@ from raisin.recipe.server.server import supervisord_conf
 from raisin.recipe.server.server import var_log_folder
 
 PROVIDER = get_provider('raisin.recipe.server')
-SANDBOX = PROVIDER.get_resource_filename("", 'tests/sandbox/')
-CONTROL = PROVIDER.get_resource_filename("", 'tests/control/')
+SANDBOX = PROVIDER.get_resource_filename("", 'tests/sandbox')
+CONTROL = PROVIDER.get_resource_filename("", 'tests/control')
 PATH = os.path.join(SANDBOX, 'buildout')
 
 
@@ -39,7 +39,16 @@ def files_are_equal(path):
     control = os.path.join(CONTROL, path)
     sandbox_file = open(sandbox, 'r')
     control_file = open(control, 'r')
-    return sandbox_file.read() == control_file.read()
+    sandbox_text = sandbox_file.read().replace(SANDBOX, "")
+    control_text = control_file.read()
+    sandbox_file.close()
+    control_file.close()
+    if not sandbox_text == control_text:
+        print "cwdiff %s %s" % (sandbox, control)
+        import pdb; pdb.set_trace()
+        return False
+    else:
+        return True
 
 
 class RecipeTests(unittest.TestCase):
