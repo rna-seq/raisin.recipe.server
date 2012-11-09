@@ -232,7 +232,7 @@ class RecipeTests(unittest.TestCase):
         """
         buildout_directory = SANDBOX
         pyramid_users_ini(buildout_directory)
-        self.failUnless(files_are_equal('etc/supervisor/development.conf'))
+        self.failUnless(files_are_equal('etc/pyramid/users.ini'))
 
     def test_supervisord_conf_development(self):
         """
