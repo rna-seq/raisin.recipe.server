@@ -525,9 +525,10 @@ def downloads(buildout, buildout_directory, dbs):
     make_path(buildout_directory, 'etc/projects')
     path = os.path.join(buildout_directory, 'etc/projects/downloads.ini')
     conf = open(path, 'w')
-    downloads_path = buildout['project_downloads']['path']
-    downloads_url = buildout['project_downloads']['url']
-    exclude_projects = buildout['project_downloads']['exclude_projects'].split('\n')
+    project_downloads = buildout['project_downloads']
+    downloads_path = project_downloads['path']
+    downloads_url = project_downloads['url']
+    exclude_projects = project_downloads['exclude_projects'].split('\n')
     downloads_folders = buildout['project_downloads_folder']
     for project, db, commondb in dbs:
         if project in exclude_projects:
@@ -546,6 +547,7 @@ def downloads(buildout, buildout_directory, dbs):
         conf.write("""DB = %s\n""" % db)
         conf.write("""COMMONDB = %s\n\n""" % commondb)
     conf.close()
+
 
 def main(buildout, buildout_directory, staging):
     """
