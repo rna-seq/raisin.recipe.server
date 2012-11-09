@@ -96,7 +96,7 @@ class RecipeTests(unittest.TestCase):
         profiles = [{'project_id':'dummy',
                      'DB': 'db1',
                      'COMMONDB': 'db2'
-                    }]
+                     }]
         found = get_dbs(profiles)
         expected = [('dummy', 'db1', 'db2')]
         self.failUnless(found == expected, found)
@@ -151,13 +151,13 @@ class RecipeTests(unittest.TestCase):
                     'parameter_categories': {'read_length': 'experiment'},
                     'parameter_types': {'read_length': 'integer'},
                     'parameter_columns': {'read_length': 'read_length'},
-                   }
+                    }
         expected = {}
         expected['read_length'] = {'title': 'Read Length',
                                    'category': 'experiment',
                                    'type': 'integer',
                                    'column': 'read_length'
-                                  }
+                                   }
         found = get_parameters(buildout)
         self.failUnless(found == expected, found)
 
@@ -170,8 +170,8 @@ class RecipeTests(unittest.TestCase):
                                       'category': 'experiment',
                                       'type': 'integer',
                                       'column': 'read_length'
-                                     }
-                     }
+                                      }
+                      }
         misc_parameters_ini(buildout_directory, parameters)
         self.failUnless(files_are_equal('etc/misc/parameters.ini'))
 
