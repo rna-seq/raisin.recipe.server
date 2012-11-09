@@ -45,7 +45,6 @@ def files_are_equal(path):
     control_file.close()
     if not sandbox_text == control_text:
         print "cwdiff %s %s" % (sandbox, control)
-        import pdb; pdb.set_trace()
         return False
     else:
         return True
