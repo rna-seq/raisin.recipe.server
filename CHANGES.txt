@@ -1,3 +1,12 @@
+1.1.6 (2012-11-09)
+==================
+
+- Fix configuration writing in raisin/recipe/server/server.py
+
+- Unit Tests fixed
+
+- Pep8
+
 1.1.5 (2012-08-03)
 ==================
 
